@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace DafDev.TemperatureCaptor.Domain.Sensor;
 
 public class SensorTests
@@ -9,13 +11,13 @@ public class SensorTests
 
     [Theory]
     [MemberData(nameof(InMemoryTestData.GetMinimalTestData), MemberType = typeof(InMemoryTestData))]
-    public void ConvertTemperatureToSensorState_WhenReceivingTemperature_ReturnsCorrectSensorState(double temperature, SensorState expectedState)
+    public async Task ConvertTemperatureToSensorState_WhenReceivingTemperature_ReturnsCorrectSensorState(double temperature, SensorState expectedState)
     {
         //Arrange
-        _captureTemperatureMock.Setup(c => c.GetTemperature()).Returns(temperature);
+        _captureTemperatureMock.Setup(c => c.GetTemperature()).ReturnsAsync(temperature);
 
         //Act
-        var  actualState = _sensor.DisplaySensorState();
+        var  actualState = await _sensor.DisplaySensorState();
 
         //Assert
         Assert.Equal(expectedState, actualState);
@@ -23,14 +25,14 @@ public class SensorTests
 
     [Theory]
     [MemberData(nameof(InMemoryTestData.GetExtensiveTestData), MemberType = typeof(InMemoryTestData))]
-    public void ConvertTemperaturesToSensorState_WhenReceivingTemperature_ReturnsTheLastFifteenMeasures(IEnumerable<double> temperatures,
+    public async Task  ConvertTemperaturesToSensorState_WhenReceivingTemperature_ReturnsTheLastFifteenMeasures(IEnumerable<double> temperatures,
         IEnumerable<SensorState> expectedStates)
     {
         //Arrange
-        _captureTemperatureMock.Setup(c => c.GetTemperatures(It.IsAny<int>())).Returns(temperatures);
+        _captureTemperatureMock.Setup(c => c.GetTemperatures(It.IsAny<int>())).ReturnsAsync(temperatures);
 
         //Act
-        var actualStates = _sensor.DisplaySensorStates();
+        var actualStates = await _sensor.DisplaySensorStates();
 
         //Assert
         Assert.Equal(expectedStates, actualStates);

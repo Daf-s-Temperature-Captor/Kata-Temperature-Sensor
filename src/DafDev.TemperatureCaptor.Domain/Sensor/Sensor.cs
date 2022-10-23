@@ -13,14 +13,16 @@ public class Sensor : IDisplayWeather, ITemperatureThresholds
     public double FromColdToWarm { get; set; }
     public double FromWarmToHot { get; set; }
 
-    public IEnumerable<SensorState> DisplaySensorStates(int numberOfMeasures = 15)
+    public async Task<IEnumerable<SensorState>> DisplaySensorStates(int numberOfMeasures = 15)
     {
-        var temperatures = _temperaturesCaptor.GetTemperatures(numberOfMeasures);
+        var temperatures = await _temperaturesCaptor.GetTemperatures(numberOfMeasures);
+        var states = new List<SensorState>();
         foreach(var temperature in temperatures)
-            yield return ConvertTemperatureToSensorState(temperature);
+            states.Add(ConvertTemperatureToSensorState(temperature));
+        return states;
     }
 
-    public SensorState DisplaySensorState() => ConvertTemperatureToSensorState(_temperaturesCaptor.GetTemperature());
+    public async Task<SensorState> DisplaySensorState() => ConvertTemperatureToSensorState(await _temperaturesCaptor.GetTemperature());
 
     private SensorState ConvertTemperatureToSensorState(double temperature)
         => temperature < FromColdToWarm ? SensorState.Cold : temperature < FromWarmToHot ? SensorState.Warm : SensorState.Hot;
