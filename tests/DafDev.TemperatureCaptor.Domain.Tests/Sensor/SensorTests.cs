@@ -15,7 +15,7 @@ public class SensorTests
         _captureTemperatureMock.Setup(c => c.GetTemperature()).Returns(temperature);
 
         //Act
-        var  actualState = _sensor.ConvertTemperatureToSensorState();
+        var  actualState = _sensor.DisplaySensorState();
 
         //Assert
         Assert.Equal(expectedState, actualState);
@@ -30,7 +30,7 @@ public class SensorTests
         _captureTemperatureMock.Setup(c => c.GetTemperatures(It.IsAny<int>())).Returns(temperatures);
 
         //Act
-        var actualStates = _sensor.ConvertTemperaturesToSensorState();
+        var actualStates = _sensor.DisplaySensorStates();
 
         //Assert
         Assert.Equal(expectedStates, actualStates);

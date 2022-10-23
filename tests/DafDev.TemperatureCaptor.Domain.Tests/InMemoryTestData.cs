@@ -14,23 +14,8 @@ public class InMemoryTestData
 
     public static IEnumerable<object[]> GetExtensiveTestData()
     {
-        yield return new object[] { new List<double> { 60.8,5.2,23,
+        yield return new object[] { new List<double> { 
             60.8,
-            5.2,
-            23,
-            60.8,
-            5.2,
-            23,
-            60.8,
-            5.2,
-            23,
-            60.8,
-            5.2,
-            28.7,
-            60.8,
-            5.2,
-            23,
-            60.8,//This the first measure the test for the extensive data set should upt to the end tof the list
             50.2,
             22,
             108,
