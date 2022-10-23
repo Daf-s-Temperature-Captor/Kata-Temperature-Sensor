@@ -20,21 +20,33 @@ public class SensorTests
         var  actualState = await _sensor.DisplaySensorState();
 
         //Assert
-        Assert.Equal(expectedState, actualState);
+        Assert.Equal(expectedState, actualState.State);
     }
 
     [Theory]
     [MemberData(nameof(InMemoryTestData.GetExtensiveTestData), MemberType = typeof(InMemoryTestData))]
     public async Task  ConvertTemperaturesToSensorState_WhenReceivingTemperature_ReturnsTheLastFifteenMeasures(IEnumerable<double> temperatures,
-        IEnumerable<SensorState> expectedStates)
+        IEnumerable<Measure> expectedMeasures)
     {
         //Arrange
         _captureTemperatureMock.Setup(c => c.GetTemperatures(It.IsAny<int>())).ReturnsAsync(temperatures);
 
         //Act
-        var actualStates = await _sensor.DisplaySensorStates();
+        var actualMeasures = await _sensor.DisplaySensorStates();
 
         //Assert
-        Assert.Equal(expectedStates, actualStates);
+        AssertListsOfMeasuresAreEqual(expectedMeasures, actualMeasures);
+    }
+
+    private static void AssertListsOfMeasuresAreEqual(IEnumerable<Measure> expectedMeasures, IEnumerable<Measure> actualMeasures)
+    {
+        Assert.Equal(expectedMeasures.Count(), actualMeasures.Count());
+        var expectedMeasuresArray = expectedMeasures.ToArray();
+        var actualMeasuresArray = actualMeasures.ToArray();
+        for (int i = 0; i < expectedMeasures.Count(); i++)
+        {
+            Assert.Equal(expectedMeasuresArray[i].State, actualMeasuresArray[i].State);
+            Assert.Equal(expectedMeasuresArray[i].Temperature, actualMeasuresArray[i].Temperature);
+        }
     }
 }
