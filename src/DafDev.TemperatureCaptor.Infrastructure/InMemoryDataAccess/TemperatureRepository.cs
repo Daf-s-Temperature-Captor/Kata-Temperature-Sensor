@@ -1,9 +1,4 @@
 using DafDev.TemperatureCaptor.Domain.Sensor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DafDev.TemperatureCaptor.Infrastructure.InMemoryDataAccess;
 public class TemperatureRepository : ICaptureTemperatures
