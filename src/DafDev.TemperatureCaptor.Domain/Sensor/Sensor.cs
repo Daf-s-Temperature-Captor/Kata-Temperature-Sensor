@@ -27,7 +27,11 @@ public class Sensor : IDisplayWeather, ITemperatureThresholds
         var temperature = await _temperaturesCaptor.GetTemperature();
         return new (temperature, ConvertTemperatureToSensorState(temperature));
     }
+    public void ModifiyFromColdToWarmThreshold(double newTemperature) => FromColdToWarm = newTemperature;
+
+    public void ModifiyFromWarmToHotThreshold(double newTemperature) => FromWarmToHot = newTemperature;
 
     private SensorState ConvertTemperatureToSensorState(double temperature)
         => temperature < FromColdToWarm ? SensorState.Cold : temperature < FromWarmToHot ? SensorState.Warm : SensorState.Hot;
+
 }
