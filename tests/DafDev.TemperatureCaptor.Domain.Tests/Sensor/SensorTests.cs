@@ -20,4 +20,19 @@ public class SensorTests
         //Assert
         Assert.Equal(expectedState, actualState);
     }
+
+    [Theory]
+    [MemberData(nameof(InMemoryTestData.GetExtensiveTestData), MemberType = typeof(InMemoryTestData))]
+    public void ConvertTemperaturesToSensorState_WhenReceivingTemperature_ReturnsTheLastFifteenMeasures(IEnumerable<double> temperatures,
+        IEnumerable<SensorState> expectedStates)
+    {
+        //Arrange
+        _captureTemperatureMock.Setup(c => c.GetTemperatures(It.IsAny<int>())).Returns(temperatures);
+
+        //Act
+        var actualStates = _sensor.ConvertTemperaturesToSensorState();
+
+        //Assert
+        Assert.Equal(expectedStates, actualStates);
+    }
 }

@@ -13,6 +13,11 @@ public class Sensor : IDisplayWeather, ITemperatureThresholds
     public double FromColdToWarm { get; set; }
     public double FromWarmToHot { get; set; }
 
+    public IEnumerable<SensorState> ConvertTemperaturesToSensorState()
+    {
+        return new List<SensorState>();
+    }
+
     public SensorState ConvertTemperatureToSensorState()
     {
         var temperature = _temperaturesCaptor.GetTemperature();
